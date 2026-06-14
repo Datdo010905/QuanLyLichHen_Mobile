@@ -8,21 +8,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.quanlydatlich.R;
-import com.example.quanlydatlich.model.ServiceModel;
+
+import com.example.quanlydatlich.model.ServiceResponse.ServiceModel;
 import java.util.List;
 
+
+//lắp ráp để hiển thị danh sách dịch vụ
 public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceViewHolder> {
-
     private List<ServiceModel> serviceList;
-
+    //khởi tạo hàm
     public ServiceAdapter(List<ServiceModel> serviceList) {
         this.serviceList = serviceList;
     }
 
+    //lớp view holder để giữ view trong danh sách
     public static class ServiceViewHolder extends RecyclerView.ViewHolder {
         ImageView imgService;
         TextView tvServiceName;
-
+        //hàm khởi tạo
         public ServiceViewHolder(@NonNull View itemView) {
             super(itemView);
             imgService = itemView.findViewById(R.id.imgService);
@@ -32,20 +35,39 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
 
     @NonNull
     @Override
+    //tạo view holder để hiển thị danh sách dịch vụ
     public ServiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_service, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                                  .inflate(R.layout.item_service, parent, false);
         return new ServiceViewHolder(view);
     }
 
     @Override
+    //đổ dữ liệu vào view holder
     public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
+        // Lấy dịch vụ hiện tại
         ServiceModel currentItem = serviceList.get(position);
+        // Gắn tên dịch vụ
         holder.tvServiceName.setText(currentItem.getName());
-        holder.imgService.setImageResource(currentItem.getImageResId());
+
+        // 1. Lấy chuỗi đường dẫn ảnh từ API (Ví dụ: "/img/product/abc.jpg")
+        String hinhAnh = currentItem.getHinh();
+
+        // 2. Nối thêm địa chỉ Server vào đầu để lấy ảnh đầy đủ
+        String baseUrl = "http://192.168.90.101:5000";
+        String fullImageUrl = baseUrl + hinhAnh;
+
+        // 3. Gọi Glide tải ảnh và đắp vào ImageView
+        com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                .load(fullImageUrl)
+                .placeholder(com.example.quanlydatlich.R.mipmap.ic_launcher) // Ảnh hiển thị tạm trong lúc chờ mạng load
+                .error(com.example.quanlydatlich.R.mipmap.ic_launcher) // Ảnh hiển thị nếu link lỗi/không tìm thấy
+                .into(holder.imgService);
     }
 
     @Override
+    //hàm trả về số lượng dịch vụ để hiển thị
     public int getItemCount() {
-        return serviceList.size();
+        return serviceList != null ? serviceList.size() : 0;
     }
 }

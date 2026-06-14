@@ -10,8 +10,6 @@ import com.example.quanlydatlich.R;
 import java.util.List;
 
 public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerViewHolder> {
-
-    // Lần này mình chỉ cần truyền vào list các con số (ID của ảnh trong thư mục drawable)
     private List<Integer> imageList;
 
     public BannerAdapter(List<Integer> imageList) {

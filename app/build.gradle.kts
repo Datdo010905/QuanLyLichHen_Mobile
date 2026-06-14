@@ -44,4 +44,13 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("com.airbnb.android:lottie:6.4.0") // Phiên bản mới nhất hiện tại
+
+    // Retrofit cốt lõi
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    // Bộ chuyển đổi JSON (Gson) để tự động biến Java Object thành JSON gửi lên server
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Thư viện load ảnh siêu tốc Glide
+implementation("com.github.bumptech.glide:glide:4.16.0")
+annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 }
