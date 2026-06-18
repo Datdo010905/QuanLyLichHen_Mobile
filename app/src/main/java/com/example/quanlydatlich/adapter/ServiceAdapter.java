@@ -1,5 +1,6 @@
 package com.example.quanlydatlich.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quanlydatlich.R;
 
 import com.example.quanlydatlich.model.ServiceResponse.ServiceModel;
+import com.example.quanlydatlich.ui.ServiceDetailActivity;
+
 import java.util.List;
 
 
 //lắp ráp để hiển thị danh sách dịch vụ
 public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceViewHolder> {
     private List<ServiceModel> serviceList;
-    //khởi tạo hàm
+    //gõ tìm kiếm đến đâu, danh sách được cập nhật
+    public void updateList(List<ServiceModel> newList) {
+        this.serviceList = newList;
+        notifyDataSetChanged(); //check thay đổi
+    }
+    // Hàm khởi tạo Adapter
     public ServiceAdapter(List<ServiceModel> serviceList) {
         this.serviceList = serviceList;
     }
@@ -25,7 +33,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
     public static class ServiceViewHolder extends RecyclerView.ViewHolder {
         ImageView imgService;
         TextView tvServiceName;
-        //hàm khởi tạo
+        //hàm khởi tạo dịch vụ có tên và ảnh
         public ServiceViewHolder(@NonNull View itemView) {
             super(itemView);
             imgService = itemView.findViewById(R.id.imgService);
@@ -63,6 +71,18 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
                 .placeholder(com.example.quanlydatlich.R.mipmap.ic_launcher) // Ảnh hiển thị tạm trong lúc chờ mạng load
                 .error(com.example.quanlydatlich.R.mipmap.ic_launcher) // Ảnh hiển thị nếu link lỗi/không tìm thấy
                 .into(holder.imgService);
+
+        // Click sang chi tiết dịch vụ
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //lấy context từ view holder
+                Intent intent = new Intent(v.getContext(), ServiceDetailActivity.class);
+                intent.putExtra("SERVICE_DATA", currentItem);
+                //next
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override

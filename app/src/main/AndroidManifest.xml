@@ -16,6 +16,15 @@
             android:name=".ui.LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.ServiceDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.HomeActivity"
             android:exported="true" >
             <intent-filter>
