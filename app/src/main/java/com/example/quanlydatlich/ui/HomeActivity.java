@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -35,7 +37,9 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     private TextView tvLoginNow;
-
+    // Khai báo biến toàn cục
+    private final Handler handler = new Handler(android.os.Looper.getMainLooper());
+    private Runnable runnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,25 +208,77 @@ public class HomeActivity extends AppCompatActivity {
         listBanners.add(R.drawable.slideshow_8);
         listBanners.add(R.drawable.slideshow_9);
 
-        viewPagerBanner.setAdapter(new BannerAdapter(listBanners));
+        BannerAdapter adapter = new BannerAdapter(listBanners);
+        viewPagerBanner.setAdapter(adapter);
+
+        viewPagerBanner.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+                if (state == ViewPager2.SCROLL_STATE_DRAGGING) {
+                    handler.removeCallbacks(runnable);
+                }
+                else if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    handler.removeCallbacks(runnable);
+                    handler.postDelayed(runnable, 3000);
+                }
+            }
+        });
+
 
         viewPagerBanner.setClipToPadding(false);
         viewPagerBanner.setClipChildren(false);
-        viewPagerBanner.setOffscreenPageLimit(3);
+        viewPagerBanner.setOffscreenPageLimit(1);
         viewPagerBanner.setPadding(50, 0, 50, 0);
-        viewPagerBanner.setPageTransformer(new MarginPageTransformer(24));
+        CompositePageTransformer transformer =
+                new CompositePageTransformer();
+
+        transformer.addTransformer(
+                new MarginPageTransformer(20)
+        );
+
+        transformer.addTransformer((page, position) -> {
+            float r = 1 - Math.abs(position);
+
+            page.setScaleY(0.85f + r * 0.15f);
+            page.setAlpha(0.5f + r * 0.5f);
+        });
+
+        viewPagerBanner.setPageTransformer(transformer);
 
         RecyclerView recyclerView =
                 (RecyclerView) viewPagerBanner.getChildAt(0);
 
         recyclerView.setClipToPadding(false);
         recyclerView.setClipChildren(false);
-    }
 
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                int nextItem = viewPagerBanner.getCurrentItem() + 1;
+
+                if (nextItem >= adapter.getItemCount()) {
+                    nextItem = 0;
+                }
+
+                viewPagerBanner.setCurrentItem(nextItem, true);
+
+                handler.removeCallbacks(this);
+                handler.postDelayed(this, 3000);
+            }
+        };
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable); // Dừng banner khi thoát app/màn hình
+    }
     @Override
     protected void onResume() {
         super.onResume();
-
+        // Khởi động lại banner
+        handler.removeCallbacks(runnable);
+        handler.postDelayed(runnable, 3000);
         TextView tvUserName = findViewById(R.id.tvUserName);
         tvLoginNow = findViewById(R.id.tvLoginNow);
         tvLoginNow.setPaintFlags(
