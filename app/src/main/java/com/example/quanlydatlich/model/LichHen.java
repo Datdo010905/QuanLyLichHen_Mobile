@@ -1,10 +1,16 @@
 package com.example.quanlydatlich.model;
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class LichHen {
-    public String maLich, ngayHen, gioHen, trangThai, maChiNhanh, maKH;
+    @SerializedName("MALICH") public String maLich;
+    @SerializedName("NGAYHEN") public String ngayHen;
+    @SerializedName("GIOHEN") public String gioHen;
+    @SerializedName("TRANGTHAI") public String trangThai;
+    @SerializedName("MACHINHANH") public String maChiNhanh;
 
     public static class LichHenRes {
-        public List<LichHen> data;
+        @SerializedName("success") public boolean success;
+        @SerializedName("data") public List<LichHen> data;
     }
 }

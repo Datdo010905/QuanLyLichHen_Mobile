@@ -137,7 +137,7 @@ public class BookingActivity extends AppCompatActivity {
         ids.add("");
 
         for (NhanVien nv : listNhanVien) {
-            if (nv.maChiNhanh != null && nv.maChiNhanh.trim().equals(selectedChiNhanhId)
+            if (nv.maChiNhanh.trim() != null && nv.maChiNhanh.trim().equals(selectedChiNhanhId)
                     && nv.chucVu.trim() != null && nv.chucVu.trim().equals("Stylist")) {
                 displayNames.add(nv.maNV.trim() + " - " + nv.hoTen + " (" + nv.sdt + ")");
                 ids.add(nv.maNV);

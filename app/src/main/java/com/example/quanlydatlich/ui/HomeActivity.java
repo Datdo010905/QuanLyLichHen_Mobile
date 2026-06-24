@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.quanlydatlich.model.KhachHangResponse;
 import com.example.quanlydatlich.repository.KhachHangRepository;
+import com.example.quanlydatlich.utils.NetworkUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.quanlydatlich.R;
@@ -54,6 +56,20 @@ public class HomeActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
 
+        //Check mạng ngay khi app vừa mở lên
+        if (!NetworkUtils.isConnected(this)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Không có kết nối mạng")
+                    .setMessage("App cần mạng để tải dữ liệu đặt lịch. Vui lòng kiểm tra Wifi hoặc 4G!")
+                    .setPositiveButton("Thử lại", (d, w) -> {
+                        // Tự động khởi động lại Activity để check lại
+                        finish();
+                        startActivity(getIntent());
+                    })
+                    .setNegativeButton("Thoát", (d, w) -> finish())
+                    .setCancelable(false) // Bắt buộc khách phải chọn 1 trong 2
+                    .show();
+        }
 
         RecyclerView rvServices = findViewById(R.id.rvServices);
         RecyclerView rvServices2 = findViewById(R.id.rvServices2);
@@ -233,6 +249,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     editor.apply();
                 }
+
                 @Override
                 public void onError(String errorMessage) {
                 }

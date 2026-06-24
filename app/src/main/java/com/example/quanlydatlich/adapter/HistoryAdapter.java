@@ -95,7 +95,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             for (ChiTietLichHen ct : listChiTiet) {
                 if (ct.maLich != null && ct.maLich.trim().equals(lh.maLich.trim())) {
 
-                    tongTien += ct.gia;
+                    tongTien += ct.giaDuKien;
 
                     //lấy tên Thợ
                     if (ct.maNV != null) {
