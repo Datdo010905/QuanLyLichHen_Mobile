@@ -267,12 +267,18 @@ public class BookingActivity extends AppCompatActivity {
         repository.submitBooking(request, new BookingRepository.BookingCallback() {
             @Override
             public void onSuccess(String message) {
+                // Kiểm tra xem Activity còn sống không trước khi dùng Toast/finish
+                if (isFinishing() || isDestroyed()) return;
+
                 Toast.makeText(BookingActivity.this, "🎉 " + message, Toast.LENGTH_LONG).show();
                 finish();
             }
 
             @Override
             public void onError(String errorMessage) {
+                // tránh lỗi crash nếu người dùng đã thoát Activity trước khi API trả về
+                if (isFinishing() || isDestroyed()) return;
+
                 Toast.makeText(BookingActivity.this, "Lỗi: " + errorMessage, Toast.LENGTH_SHORT).show();
                 toggleLoadingState(false);
             }

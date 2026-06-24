@@ -29,6 +29,7 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
+
     </LinearLayout>
 
     <ScrollView
@@ -62,7 +63,7 @@
                     <View
                         android:layout_width="2dp"
                         android:layout_height="match_parent"
-                        android:background="#CCCCCC" />
+                        android:background="#467ED8" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -83,7 +84,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="8dp"
-                        android:background="@android:drawable/btn_dropdown" />
+                        android:background="@drawable/bg_edittext" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -107,7 +108,7 @@
                     <View
                         android:layout_width="2dp"
                         android:layout_height="match_parent"
-                        android:background="#CCCCCC" />
+                        android:background="#467ED8" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -128,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="8dp"
-                        android:background="@android:drawable/btn_dropdown" />
+                        android:background="@drawable/bg_edittext" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -152,7 +153,7 @@
                     <View
                         android:layout_width="2dp"
                         android:layout_height="match_parent"
-                        android:background="#CCCCCC" />
+                        android:background="#467ED8" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -173,7 +174,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="8dp"
-                        android:background="@android:drawable/btn_dropdown" />
+                        android:background="@drawable/bg_edittext" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -197,7 +198,7 @@
                     <View
                         android:layout_width="2dp"
                         android:layout_height="match_parent"
-                        android:background="#CCCCCC" />
+                        android:background="#467ED8" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -218,7 +219,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="8dp"
-                        android:background="@android:drawable/btn_dropdown"
+                        android:background="@drawable/bg_edittext"
                         android:gravity="center_vertical"
                         android:paddingStart="12dp"
                         android:text="-- Nhấn để chọn ngày --"
@@ -262,7 +263,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="8dp"
-                        android:background="@android:drawable/btn_dropdown" />
+                        android:background="@drawable/bg_edittext" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -284,7 +285,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_marginTop="8dp"
-                    android:background="#E9ECEF"
+                    android:background="@color/bg_indicator_blue"
                     android:gravity="top|start"
                     android:hint="Vd: Cắt tóc kiểu Ivy League..."
                     android:padding="12dp"
@@ -294,16 +295,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/btnDatLichNgay"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_margin="16dp"
-        android:backgroundTint="#81C784"
-        android:text="ĐẶT LỊCH NGAY"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:textStyle="bold" />
     <TextView
         android:id="@+id/txtThongBao"
         android:text="Cắt xong trả tiền – Huỷ lịch không sao"
@@ -312,6 +303,15 @@
         android:gravity="center"
         android:textColor="#000000"
         android:textSize="12sp" />
-
+    <Button
+        android:id="@+id/btnDatLichNgay"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_margin="16dp"
+        android:backgroundTint="#153B75"
+        android:text="ĐẶT LỊCH NGAY"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 </LinearLayout>
