@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.quanlydatlich.model.KhachHangResponse;
 import com.example.quanlydatlich.repository.KhachHangRepository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.quanlydatlich.R;
 import com.example.quanlydatlich.adapter.BannerAdapter;
 import com.example.quanlydatlich.adapter.ServiceAdapter;
@@ -41,6 +43,23 @@ public class HomeActivity extends AppCompatActivity {
 
         RecyclerView rvServices = findViewById(R.id.rvServices);
         RecyclerView rvServices2 = findViewById(R.id.rvServices2);
+
+        FloatingActionButton fabBooking = findViewById(R.id.fabBooking);
+        fabBooking.setOnClickListener(v -> {
+
+            SharedPreferences prefs = getSharedPreferences("ThongTinKhach",
+                    Context.MODE_PRIVATE);
+            String maTK = prefs.getString("MATK", ""); // Lấy mã tài khoản
+
+            if (!maTK.isEmpty()) {
+                Intent intent = new Intent(HomeActivity.this, BookingActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(HomeActivity.this, "Vui lòng đăng nhập để đặt lịch!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         rvServices.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));

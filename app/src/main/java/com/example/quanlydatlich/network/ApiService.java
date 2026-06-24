@@ -1,13 +1,21 @@
 package com.example.quanlydatlich.network;
 
 
+import com.example.quanlydatlich.model.BookingRequest;
+import com.example.quanlydatlich.model.BookingResponse;
 import com.example.quanlydatlich.model.KhachHangResponse;
+import com.example.quanlydatlich.model.MasterDataResponse;
 import com.example.quanlydatlich.model.ServiceResponse;
 import com.example.quanlydatlich.model.AuthModel;
+import com.example.quanlydatlich.model.StaffBookingResponse;
+import com.example.quanlydatlich.model.UpdateProfileRequest;
+import com.example.quanlydatlich.model.UpdateStatusRequest;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -26,4 +34,41 @@ public interface ApiService {
 
     @GET("/api/khachhang/get-byId-khachhang/{id}")
     Call<KhachHangResponse> getThongTinKhachHang(@Path("id") String matk);
+
+    @POST("/api/lichhen/create-full")
+    Call<BookingResponse> createBookingTransaction(@Body BookingRequest request);
+
+
+    // ----- CÁC API CHO LUỒNG ĐẶT LỊCH -----
+    @GET("/api/nhanvien/get-all-nhanvien")
+    Call<MasterDataResponse.NhanVienRes> getAllNhanVien();
+
+    // Lấy Lịch Hẹn
+    @GET("/api/lichhen/get-all-lichhen")
+    Call<MasterDataResponse.LichHenRes> getAllLichHen();
+
+    // Lấy Chi Tiết Lịch Hẹn
+    @GET("/api/lichhen/get-all-CTlichhen")
+    Call<MasterDataResponse.ChiTietRes> getAllChiTietLichHen();
+
+
+    // Gọi API cập nhật trạng thái (Dùng cho Nút Hủy Lịch)
+    @PUT("/api/lichhen/update-lichhen/{id}")
+    Call<BookingResponse> updateBookingStatus(@Path("id") String maLich, @Body UpdateStatusRequest request);
+
+    // Gọi API lấy lịch hẹn của ĐÚNG khách hàng đang đăng nhập
+    @GET("/api/lichhen/get-byIdKH-lichhen/{id}")
+    Call<MasterDataResponse.LichHenRes> getLichHenByKhachHang(@Path("id") String maKH);
+
+    // Kéo thông tin Khách hàng
+    @GET("/api/khachhang/get-byId-khachhang/{id}")
+    Call<MasterDataResponse.KhachHangRes> getKhachHangById(@Path("id") String id);
+
+    /// Thay thế hàm update cũ bằng dòng này
+    @PUT("/api/khachhang/update-profile/{id}")
+    Call<MasterDataResponse.KhachHangRes> updateKhachHangProfile(@Path("id") String id, @Body UpdateProfileRequest request);
+
+    // Lấy lịch hẹn dành riêng cho Nhân viên (Truyền MATK vào)
+    @GET("/api/lichhen/get-byIdNV-lichhen/{matk}")
+    Call<StaffBookingResponse> getLichHenCuaNhanVien(@Path("matk") String matk);
 }

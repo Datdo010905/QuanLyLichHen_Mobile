@@ -77,8 +77,28 @@ public class ServiceDetailActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         //Đặt Lịch
+        // 💡 BẮT SỰ KIỆN NÚT ĐẶT LỊCH NGAY
         btnBookNow.setOnClickListener(v -> {
-            Toast.makeText(this, "Đã chọn: " + dichVu.getName() + " -> Chuyển sang Đặt Lịch!", Toast.LENGTH_SHORT).show();
+            // 1. Kiểm tra Két sắt xem khách đã đăng nhập chưa
+            android.content.SharedPreferences prefs = getSharedPreferences("ThongTinKhach", android.content.Context.MODE_PRIVATE);
+            String maTK = prefs.getString("MATK", "");
+
+            if (!maTK.isEmpty()) {
+                // TRƯỜNG HỢP 1: Đã có vé -> Nổ máy sang trang Đặt Lịch
+                android.content.Intent intent = new android.content.Intent(ServiceDetailActivity.this, BookingActivity.class);
+
+                // ĐIỂM ĂN TIỀN: Kẹp cái mã dịch vụ đang xem vào cốp xe để sang kia tự động chọn
+                if (dichVu != null) {
+                    intent.putExtra("MADV_CAN_XEM", dichVu.getMaDV());
+                }
+
+                startActivity(intent);
+            } else {
+                // TRƯỜNG HỢP 2: Đi lậu -> Bế sang màn Login
+                Toast.makeText(ServiceDetailActivity.this, "Vui lòng đăng nhập để chốt đơn bro ơi!", Toast.LENGTH_SHORT).show();
+                android.content.Intent intent = new android.content.Intent(ServiceDetailActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
         });
     }
 }

@@ -75,7 +75,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/bg_edittext"
                 android:hint="Số điện thoại"
-                android:inputType="phone"
+                android:inputType="text"
                 android:padding="12dp"
                 android:textSize="14sp" />
 

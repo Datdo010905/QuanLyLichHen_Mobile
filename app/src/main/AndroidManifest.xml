@@ -19,10 +19,22 @@
             android:name=".ui.ServiceDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.BookingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.StaffScheduleActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.SearchActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.HistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.EditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.HomeActivity"

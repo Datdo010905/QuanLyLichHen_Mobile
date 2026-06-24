@@ -1,5 +1,6 @@
 package com.example.quanlydatlich.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -50,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
             authRepo.login(username, password, new AuthRepository.AuthCallback() {
 
                 @Override
-                public void onSuccess(String message, String tenKhach, String token) {
+                public void onSuccess(String message, String tenKhach, String token, int phanQuyen) {
 
                     Toast.makeText(
                             LoginActivity.this,
@@ -64,8 +65,19 @@ public class LoginActivity extends AppCompatActivity {
                     prefs.edit()
                             .putString("MATK", tenKhach)
                             .putString("TOKEN", token)
+                            .putInt("PHANQUYEN", phanQuyen)
                             .apply();
 
+                    // 2. PHÂN QUYỀN ĐIỀU HƯỚNG
+                    if (phanQuyen == 3) {
+                        // Nếu là Nhân viên -> Sang thẳng trang Lịch làm việc
+                        Intent intent = new Intent(LoginActivity.this, StaffScheduleActivity.class);
+                        startActivity(intent);
+                    } else {
+                        // Nếu là Khách hàng -> Sang trang chủ
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                    }
                     finish();
                 }
 

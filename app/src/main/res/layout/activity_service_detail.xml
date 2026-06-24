@@ -85,9 +85,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="349.000 VNĐ"
-                        android:textColor="#FF5A26"
+                        android:textColor="#2ECC71"
                         android:textSize="20sp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic|bold" />
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -108,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="Bước 1: Tư vấn kiểu tóc\nBước 2: Cắt tóc tạo form\nBước 3: Uốn lạnh\nBước 4: Xả và tạo kiểu..."
+                        android:text="..."
                         android:textColor="#555555"
                         android:textSize="16sp" />
                     <View
@@ -133,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="Bước 1: Tư vấn kiểu tóc\nBước 2: Cắt tóc tạo form\nBước 3: Uốn lạnh\nBước 4: Xả và tạo kiểu..."
+                        android:text="..."
                         android:textColor="#555555"
                         android:textSize="16sp" />
 

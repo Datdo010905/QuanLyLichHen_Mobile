@@ -24,7 +24,7 @@ import com.example.quanlydatlich.repository.KhachHangRepository;;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
-    private TextView tvProfileNameValue, tvProfilePhoneValue, tvProfileEmailValue;
+    private TextView tvProfileNameValue, tvProfilePhoneValue, tvProfileEmailValue, btnEditProfile;
     private ImageView btnBackProfile;
     private Button btnLogout;
 
@@ -42,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvProfileNameValue = findViewById(R.id.tvProfileNameValue);
         tvProfilePhoneValue = findViewById(R.id.tvProfilePhoneValue);
         tvProfileEmailValue = findViewById(R.id.tvProfileEmailValue);
+        btnEditProfile = findViewById(R.id.btnEditProfile);
 
         btnBackProfile = findViewById(R.id.btnBackProfile);
         btnLogout = findViewById(R.id.btnLogout);
@@ -60,6 +61,10 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         btnBackProfile.setOnClickListener(v -> finish());
+        btnEditProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+            startActivity(intent);
+        });
 
         btnLogout.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();

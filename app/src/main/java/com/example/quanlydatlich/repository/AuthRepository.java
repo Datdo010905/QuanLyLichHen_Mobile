@@ -12,7 +12,7 @@ public class AuthRepository {
 
     // Interface trả kết quả đăng nhập về Activity
     public interface AuthCallback {
-        void onSuccess(String message, String tenKhach, String token);
+        void onSuccess(String message, String tenKhach, String token, int phanQuyen);
         void onError(String errorMessage);
     }
 
@@ -45,9 +45,10 @@ public class AuthRepository {
                             String msg = response.body().getMessage();
                             String matk = response.body().getData().getMatk();
                             String token = response.body().getToken();
+                            int quyen = response.body().getData().getPhanQuyen();
 
                             // Trả kết quả về Activity
-                            callback.onSuccess(msg, matk, token);
+                            callback.onSuccess(msg, matk, token, quyen);
                         }
                         else {
                             try {
