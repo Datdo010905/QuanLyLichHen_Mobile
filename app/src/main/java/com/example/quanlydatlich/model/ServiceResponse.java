@@ -40,9 +40,6 @@ public class ServiceResponse {
         public String getMaDV() {
             return maDV != null ? maDV.trim() : "";
         }
-        public String getLoai() {
-            return loai != null ? loai.trim() : "";
-        }
         public String getName() {
             return name != null ? name.trim() : "";
         }

@@ -1,5 +1,8 @@
 package com.example.quanlydatlich.ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,6 +13,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.quanlydatlich.R;
 import com.example.quanlydatlich.model.ServiceResponse;
+import com.example.quanlydatlich.network.RetrofitClient;
 
 public class ServiceDetailActivity extends AppCompatActivity {
 
@@ -62,7 +66,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
 
             //dùng Glide để tải ảnh
             String hinhAnh = dichVu.getHinh();
-            String baseUrl = "http://192.168.90.101:5000";
+            String baseUrl = RetrofitClient.BASE_URL.substring(0, RetrofitClient.BASE_URL.length() - 1);
             String fullImageUrl = baseUrl + hinhAnh;
 
             // 3. Gọi Glide tải ảnh và đắp vào ImageView
@@ -77,26 +81,24 @@ public class ServiceDetailActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         //Đặt Lịch
-        // 💡 BẮT SỰ KIỆN NÚT ĐẶT LỊCH NGAY
         btnBookNow.setOnClickListener(v -> {
             // 1. Kiểm tra Két sắt xem khách đã đăng nhập chưa
-            android.content.SharedPreferences prefs = getSharedPreferences("ThongTinKhach", android.content.Context.MODE_PRIVATE);
+            SharedPreferences prefs = getSharedPreferences("ThongTinKhach", Context.MODE_PRIVATE);
             String maTK = prefs.getString("MATK", "");
 
             if (!maTK.isEmpty()) {
-                // TRƯỜNG HỢP 1: Đã có vé -> Nổ máy sang trang Đặt Lịch
-                android.content.Intent intent = new android.content.Intent(ServiceDetailActivity.this, BookingActivity.class);
+                //-> sang trang Đặt Lịch
+                Intent intent = new Intent(ServiceDetailActivity.this, BookingActivity.class);
 
-                // ĐIỂM ĂN TIỀN: Kẹp cái mã dịch vụ đang xem vào cốp xe để sang kia tự động chọn
+                // mã dịch vụ đang xem
                 if (dichVu != null) {
                     intent.putExtra("MADV_CAN_XEM", dichVu.getMaDV());
                 }
 
                 startActivity(intent);
             } else {
-                // TRƯỜNG HỢP 2: Đi lậu -> Bế sang màn Login
                 Toast.makeText(ServiceDetailActivity.this, "Vui lòng đăng nhập để chốt đơn bro ơi!", Toast.LENGTH_SHORT).show();
-                android.content.Intent intent = new android.content.Intent(ServiceDetailActivity.this, LoginActivity.class);
+                Intent intent = new Intent(ServiceDetailActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });

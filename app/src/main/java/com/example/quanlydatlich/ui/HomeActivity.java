@@ -37,6 +37,20 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        SharedPreferences prefsQ = getSharedPreferences("ThongTinKhach", Context.MODE_PRIVATE);
+        int phanQuyen = prefsQ.getInt("PHANQUYEN", 0); // 0 là khách, 3 là nhân viên
+
+        if (phanQuyen == 3) {
+            //xóa sạch lịch sử quay lại
+            Intent intent = new Intent(this, StaffScheduleActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return; // Dừng việc chạy tiếp code bên dưới
+        }
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
 
@@ -240,7 +254,6 @@ public class HomeActivity extends AppCompatActivity {
                     ));
 
         } else {
-
             tvLoginNow.setVisibility(View.GONE);
         }
     }

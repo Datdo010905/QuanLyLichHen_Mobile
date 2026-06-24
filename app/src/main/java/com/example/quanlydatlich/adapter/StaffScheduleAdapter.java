@@ -8,18 +8,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.quanlydatlich.R;
 import com.example.quanlydatlich.model.ServiceResponse;
 import com.example.quanlydatlich.model.StaffBookingResponse;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class StaffScheduleAdapter extends RecyclerView.Adapter<StaffScheduleAdapter.ViewHolder> {
 
     private List<StaffBookingResponse.StaffBooking> listLich;
-    private List<ServiceResponse.ServiceModel> listDichVu; // Cuốn từ điển dịch mã DV
+
+    private HashMap<String, String> mapDichVu = new HashMap<>();
+
     private OnActionClickListener listener;
 
     public interface OnActionClickListener {
@@ -30,8 +36,16 @@ public class StaffScheduleAdapter extends RecyclerView.Adapter<StaffScheduleAdap
                                 List<ServiceResponse.ServiceModel> listDichVu,
                                 OnActionClickListener listener) {
         this.listLich = listLich;
-        this.listDichVu = listDichVu;
         this.listener = listener;
+
+        // 💡 Nhồi Data vào Map 1 lần duy nhất lúc khởi tạo Adapter
+        if (listDichVu != null) {
+            for (ServiceResponse.ServiceModel dv : listDichVu) {
+                if (dv.getMaDV() != null) {
+                    mapDichVu.put(dv.getMaDV().trim(), dv.getName());
+                }
+            }
+        }
     }
 
     @NonNull
@@ -50,7 +64,7 @@ public class StaffScheduleAdapter extends RecyclerView.Adapter<StaffScheduleAdap
         String gio = booking.gioHen != null ? booking.gioHen.split("T")[1].substring(0, 5) : "N/A";
         holder.tvThoiGianTho.setText(gio + " | " + ngay);
 
-        // 2. Thông tin Khách hàng (Object lồng)
+        // 2. Thông tin Khách hàng
         if (booking.khachHang != null) {
             String ten = booking.khachHang.hoTen != null ? booking.khachHang.hoTen : "Khách vô danh";
             String sdt = booking.khachHang.sdt != null ? booking.khachHang.sdt : "Không có SĐT";
@@ -69,7 +83,7 @@ public class StaffScheduleAdapter extends RecyclerView.Adapter<StaffScheduleAdap
                 ghiChuText = booking.chiTiet.get(0).ghiChu;
             }
 
-            // Quét mã dịch vụ để tra tên
+            // lặp qua danh sách chi tiết để lấy mã dịch vụ để tra tên
             for (StaffBookingResponse.DetailInfo ct : booking.chiTiet) {
                 if (ct.maDV != null) {
                     listTenDV.add(getTenDichVu(ct.maDV.trim()));
@@ -92,17 +106,12 @@ public class StaffScheduleAdapter extends RecyclerView.Adapter<StaffScheduleAdap
             case "Đã đặt":
                 holder.tvTrangThaiTho.setTextColor(Color.parseColor("#1890FF"));
                 holder.tvTrangThaiTho.setBackgroundResource(R.drawable.bg_status_booked);
-
-                // Hiện nút hành động
                 holder.layoutActionButtons.setVisibility(View.VISIBLE);
                 break;
 
             case "Đang chờ":
                 holder.tvTrangThaiTho.setTextColor(Color.parseColor("#722ED1"));
                 holder.tvTrangThaiTho.setBackgroundResource(R.drawable.bg_status_pending);
-
-                // Hiện nút hành động
-                holder.layoutActionButtons.setVisibility(View.VISIBLE);
                 break;
 
             case "Đang thực hiện":
@@ -126,22 +135,24 @@ public class StaffScheduleAdapter extends RecyclerView.Adapter<StaffScheduleAdap
                 break;
         }
 
-        // 5. Bắt sự kiện quẹt trạng thái
-        holder.btnXong.setOnClickListener(v -> listener.onUpdateStatus(booking.maLich, "Đã hoàn thành"));
-        holder.btnKhachKhongDen.setOnClickListener(v -> listener.onUpdateStatus(booking.maLich, "Đã huỷ"));
-    }
+        //check in KH
+        holder.btnXong.setOnClickListener(v -> {
+            if (listener != null) listener.onUpdateStatus(booking.maLich, "Đang chờ");
+        });
 
-    // Hàm Helper tra từ điển dịch vụ
+        holder.btnKhachKhongDen.setOnClickListener(v -> {
+            if (listener != null) listener.onUpdateStatus(booking.maLich, "Đã huỷ");
+        });
+    }
+    //map dịch vụ
     private String getTenDichVu(String maDV) {
-        if (listDichVu == null) return maDV;
-        for (ServiceResponse.ServiceModel dv : listDichVu) {
-            if (dv.getMaDV().equals(maDV)) return dv.getName();
-        }
-        return maDV;
+        return mapDichVu.containsKey(maDV) ? mapDichVu.get(maDV) : maDV;
     }
 
     @Override
-    public int getItemCount() { return listLich != null ? listLich.size() : 0; }
+    public int getItemCount() {
+        return listLich != null ? listLich.size() : 0;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvThoiGianTho, tvTrangThaiTho, tvTenKhachTho, tvDichVuTho, tvGhiChuTho;

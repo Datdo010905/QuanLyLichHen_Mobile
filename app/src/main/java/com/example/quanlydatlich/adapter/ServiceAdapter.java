@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quanlydatlich.R;
 
 import com.example.quanlydatlich.model.ServiceResponse.ServiceModel;
+import com.example.quanlydatlich.network.RetrofitClient;
 import com.example.quanlydatlich.ui.ServiceDetailActivity;
 
 import java.util.List;
@@ -58,12 +59,10 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
         // Gắn tên dịch vụ
         holder.tvServiceName.setText(currentItem.getName());
 
-        // 1. Lấy chuỗi đường dẫn ảnh từ API (Ví dụ: "/img/product/abc.jpg")
-        String hinhAnh = currentItem.getHinh();
 
         // 2. Nối thêm địa chỉ Server vào đầu để lấy ảnh đầy đủ
-        String baseUrl = "http://192.168.90.101:5000";
-        String fullImageUrl = baseUrl + hinhAnh;
+        String serverUrl = RetrofitClient.BASE_URL.substring(0, RetrofitClient.BASE_URL.length() - 1);
+        String fullImageUrl = serverUrl + currentItem.getHinh();
 
         // 3. Gọi Glide tải ảnh và đắp vào ImageView
         com.bumptech.glide.Glide.with(holder.itemView.getContext())

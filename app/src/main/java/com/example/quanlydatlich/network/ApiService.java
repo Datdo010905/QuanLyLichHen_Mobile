@@ -3,8 +3,10 @@ package com.example.quanlydatlich.network;
 
 import com.example.quanlydatlich.model.BookingRequest;
 import com.example.quanlydatlich.model.BookingResponse;
+import com.example.quanlydatlich.model.ChiTietLichHen;
 import com.example.quanlydatlich.model.KhachHangResponse;
-import com.example.quanlydatlich.model.MasterDataResponse;
+import com.example.quanlydatlich.model.LichHen;
+import com.example.quanlydatlich.model.NhanVien;
 import com.example.quanlydatlich.model.ServiceResponse;
 import com.example.quanlydatlich.model.AuthModel;
 import com.example.quanlydatlich.model.StaffBookingResponse;
@@ -41,15 +43,15 @@ public interface ApiService {
 
     // ----- CÁC API CHO LUỒNG ĐẶT LỊCH -----
     @GET("/api/nhanvien/get-all-nhanvien")
-    Call<MasterDataResponse.NhanVienRes> getAllNhanVien();
+    Call<NhanVien.NhanVienRes> getAllNhanVien();
 
     // Lấy Lịch Hẹn
     @GET("/api/lichhen/get-all-lichhen")
-    Call<MasterDataResponse.LichHenRes> getAllLichHen();
+    Call<LichHen.LichHenRes> getAllLichHen();
 
     // Lấy Chi Tiết Lịch Hẹn
     @GET("/api/lichhen/get-all-CTlichhen")
-    Call<MasterDataResponse.ChiTietRes> getAllChiTietLichHen();
+    Call<ChiTietLichHen.ChiTietRes> getAllChiTietLichHen();
 
 
     // Gọi API cập nhật trạng thái (Dùng cho Nút Hủy Lịch)
@@ -58,15 +60,15 @@ public interface ApiService {
 
     // Gọi API lấy lịch hẹn của ĐÚNG khách hàng đang đăng nhập
     @GET("/api/lichhen/get-byIdKH-lichhen/{id}")
-    Call<MasterDataResponse.LichHenRes> getLichHenByKhachHang(@Path("id") String maKH);
+    Call<LichHen.LichHenRes> getLichHenByKhachHang(@Path("id") String maKH);
 
     // Kéo thông tin Khách hàng
     @GET("/api/khachhang/get-byId-khachhang/{id}")
-    Call<MasterDataResponse.KhachHangRes> getKhachHangById(@Path("id") String id);
+    Call<KhachHangResponse> getKhachHangById(@Path("id") String id);
 
     /// Thay thế hàm update cũ bằng dòng này
     @PUT("/api/khachhang/update-profile/{id}")
-    Call<MasterDataResponse.KhachHangRes> updateKhachHangProfile(@Path("id") String id, @Body UpdateProfileRequest request);
+    Call<KhachHangResponse> updateKhachHangProfile(@Path("id") String id, @Body UpdateProfileRequest request);
 
     // Lấy lịch hẹn dành riêng cho Nhân viên (Truyền MATK vào)
     @GET("/api/lichhen/get-byIdNV-lichhen/{matk}")

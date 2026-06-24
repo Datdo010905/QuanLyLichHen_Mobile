@@ -12,10 +12,10 @@ public class StaffBookingResponse {
         @SerializedName("GIOHEN") public String gioHen;
         @SerializedName("TRANGTHAI") public String trangThai;
 
-        // 💡 Hứng Object Khách Hàng lồng bên trong
+        //Hứng Object Khách Hàng lồng bên trong
         @SerializedName("KHACHHANG") public CustomerInfo khachHang;
 
-        // 💡 Hứng mảng Chi Tiết lồng bên trong
+        // Hứng mảng Chi Tiết lồng bên trong
         @SerializedName("CHITIETLICHHEN") public List<DetailInfo> chiTiet;
     }
 

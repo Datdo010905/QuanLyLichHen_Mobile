@@ -83,7 +83,7 @@
                 android:layout_height="45dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:backgroundTint="#9E9E9E"
+                android:backgroundTint="#F82D2D"
                 android:text="KHÁCH HỦY"
                 android:textColor="#FFFFFF" />
 
@@ -94,7 +94,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:backgroundTint="#4CAF50"
-                android:text="HOÀN THÀNH"
+                android:text="CHECK-IN"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
     </LinearLayout>

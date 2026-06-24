@@ -10,37 +10,48 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.quanlydatlich.R;
-import com.example.quanlydatlich.model.MasterDataResponse;
+import com.example.quanlydatlich.model.ChiTietLichHen;
+import com.example.quanlydatlich.model.LichHen;
+import com.example.quanlydatlich.model.NhanVien;
 import com.example.quanlydatlich.model.ServiceResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
-    private List<MasterDataResponse.LichHen> listLichHen;
-    private List<MasterDataResponse.ChiTiet> listChiTiet;
+    private List<LichHen> listLichHen;
+    private List<ChiTietLichHen> listChiTiet;
 
-    // 💡 2 Cuốn từ điển để tra cứu tên
-    private List<MasterDataResponse.NhanVien> listNhanVien;
-    private List<ServiceResponse.ServiceModel> listDichVu;
-
-    private OnItemCancelListener listener;
+    private HashMap<String, String> mapNhanVien = new HashMap<>();
+    private HashMap<String, String> mapDichVu = new HashMap<>();
 
     public interface OnItemCancelListener {
         void onCancelClick(String maLich);
     }
 
-    // 💡 Cập nhật Constructor nhận thêm 2 cuốn từ điển
-    public HistoryAdapter(List<MasterDataResponse.LichHen> listLichHen,
-                          List<MasterDataResponse.ChiTiet> listChiTiet,
-                          List<MasterDataResponse.NhanVien> listNhanVien,
+    private OnItemCancelListener listener;
+
+    public HistoryAdapter(List<LichHen> listLichHen,
+                          List<ChiTietLichHen> listChiTiet,
+                          List<NhanVien> listNhanVien,
                           List<ServiceResponse.ServiceModel> listDichVu,
                           OnItemCancelListener listener) {
         this.listLichHen = listLichHen;
         this.listChiTiet = listChiTiet;
-        this.listNhanVien = listNhanVien;
-        this.listDichVu = listDichVu;
         this.listener = listener;
+
+        // cho Data vào Map 1 lần duy nhất lúc khởi tạo Adapter
+        if (listNhanVien != null) {
+            for (NhanVien nv : listNhanVien) {
+                if (nv.maNV != null) mapNhanVien.put(nv.maNV.trim(), nv.hoTen);
+            }
+        }
+        if (listDichVu != null) {
+            for (ServiceResponse.ServiceModel dv : listDichVu) {
+                if (dv.getMaDV() != null) mapDichVu.put(dv.getMaDV().trim(), dv.getName());
+            }
+        }
     }
 
     @NonNull
@@ -52,7 +63,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MasterDataResponse.LichHen lh = listLichHen.get(position);
+        LichHen lh = listLichHen.get(position);
 
         holder.tvMaLichItem.setText("Mã lịch: " + lh.maLich);
 
@@ -63,9 +74,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         String trangThai = lh.trangThai != null ? lh.trangThai.trim() : "";
         holder.tvTrangThaiItem.setText(trangThai);
 
-        // ==========================================
-        // 1. DỊCH TÊN CHI NHÁNH
-        // ==========================================
         String tenChiNhanh = "Đang cập nhật";
         if (lh.maChiNhanh != null) {
             switch (lh.maChiNhanh.trim()) {
@@ -78,44 +86,41 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
         holder.tvChiNhanhItem.setText("🏠 Chi nhánh: " + tenChiNhanh);
 
-        // ==========================================
-        // 2. DỊCH TÊN THỢ VÀ DỊCH VỤ
-        // ==========================================
         List<String> danhSachTho = new ArrayList<>();
         List<String> danhSachDichVu = new ArrayList<>();
         double tongTien = 0;
 
-        for (MasterDataResponse.ChiTiet ct : listChiTiet) {
-            if (ct.maLich != null && ct.maLich.trim().equals(lh.maLich.trim())) {
+        //check chi tiết lịch
+        if (listChiTiet != null) {
+            for (ChiTietLichHen ct : listChiTiet) {
+                if (ct.maLich != null && ct.maLich.trim().equals(lh.maLich.trim())) {
 
-                // Cộng tiền luôn thể
-                tongTien += ct.giaDuKien;
+                    tongTien += ct.gia;
 
-                // Tra tên Thợ
-                if (ct.maNV != null) {
-                    String tenTho = getTenTho(ct.maNV.trim());
-                    if (!danhSachTho.contains(tenTho)) {
-                        danhSachTho.add(tenTho); // Chống lặp tên
+                    //lấy tên Thợ
+                    if (ct.maNV != null) {
+                        String tenTho = getTenTho(ct.maNV.trim());
+                        if (!danhSachTho.contains(tenTho)) {
+                            danhSachTho.add(tenTho);
+                        }
                     }
-                }
 
-                // Tra tên Dịch Vụ
-                if (ct.maDV != null) {
-                    danhSachDichVu.add(getTenDichVu(ct.maDV.trim()));
+                    //lấy tên dv
+                    if (ct.maDV != null) {
+                        danhSachDichVu.add(getTenDichVu(ct.maDV.trim()));
+                    }
                 }
             }
         }
 
-        // Nối tên lại bằng dấu phẩy
+        // Nối tên bằng dấu phẩy
         String textTho = danhSachTho.isEmpty() ? "Đang cập nhật" : TextUtils.join(", ", danhSachTho);
         String textDichVu = danhSachDichVu.isEmpty() ? "Đang cập nhật" : TextUtils.join(", ", danhSachDichVu);
 
         holder.tvThoCatItem.setText("✂️ Stylist: " + textTho);
         holder.tvDichVuItem.setText("💈 Dịch vụ: " + textDichVu);
 
-        // ==========================================
-        // 3. XỬ LÝ TRẠNG THÁI (Màu sắc, Nút hủy, Tổng tiền)
-        // ==========================================
+
         holder.btnHuyLichItem.setVisibility(View.GONE);
         holder.tvTongTienItem.setVisibility(View.GONE);
 
@@ -124,14 +129,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             case "Đã đặt":
                 holder.tvTrangThaiItem.setTextColor(Color.parseColor("#1890FF"));
                 holder.tvTrangThaiItem.setBackgroundResource(R.drawable.bg_status_booked);
-
                 holder.btnHuyLichItem.setVisibility(View.VISIBLE);
                 break;
 
             case "Đang chờ":
                 holder.tvTrangThaiItem.setTextColor(Color.parseColor("#722ED1"));
                 holder.tvTrangThaiItem.setBackgroundResource(R.drawable.bg_status_pending);
-
                 holder.btnHuyLichItem.setVisibility(View.VISIBLE);
                 break;
 
@@ -149,11 +152,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             case "Hoàn thành":
                 holder.tvTrangThaiItem.setTextColor(Color.parseColor("#52C41A"));
                 holder.tvTrangThaiItem.setBackgroundResource(R.drawable.bg_status_completed);
-
                 holder.tvTongTienItem.setVisibility(View.VISIBLE);
 
                 String giaFormat = String.format("%,.0f VNĐ", tongTien);
-
                 holder.tvTongTienItem.setText("Tổng thanh toán: " + giaFormat);
                 break;
         }
@@ -163,26 +164,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         });
     }
 
-    // 💡 HÀM HELPER: Dịch mã Thợ sang Tên thật
+    // 💡 HÀM HELPER: Dịch mã Thợ và Dịch Vụ sang Tên thật không dùng vòng lặp
     private String getTenTho(String maNV) {
-        if (listNhanVien == null) return maNV;
-        for (MasterDataResponse.NhanVien nv : listNhanVien) {
-            if (nv.maNV != null && nv.maNV.trim().equals(maNV)) {
-                return nv.hoTen; // Thấy mã khớp là móc cái tên ra trả về
-            }
-        }
-        return maNV; // Không thấy thì đành trả về mã gốc
+        return mapNhanVien.containsKey(maNV) ? mapNhanVien.get(maNV) : maNV;
     }
 
-    // 💡 HÀM HELPER: Dịch mã Dịch Vụ sang Tên thật
     private String getTenDichVu(String maDV) {
-        if (listDichVu == null) return maDV;
-        for (ServiceResponse.ServiceModel dv : listDichVu) {
-            if (dv.getMaDV().equals(maDV)) {
-                return dv.getName();
-            }
-        }
-        return maDV;
+        return mapDichVu.containsKey(maDV) ? mapDichVu.get(maDV) : maDV;
     }
 
     @Override

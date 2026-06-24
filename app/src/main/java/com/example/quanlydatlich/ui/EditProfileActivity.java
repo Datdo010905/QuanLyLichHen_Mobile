@@ -15,13 +15,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.quanlydatlich.R;
-import com.example.quanlydatlich.model.MasterDataResponse;
-import com.example.quanlydatlich.network.ApiService;
-import com.example.quanlydatlich.network.RetrofitClient;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.quanlydatlich.model.KhachHangResponse;
+import com.example.quanlydatlich.model.UpdateProfileRequest;
+import com.example.quanlydatlich.repository.ProfileRepository;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -30,7 +26,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView btnBackProfile;
 
     private String currentMaTK = "";
-    private String currentMaKH = ""; // 💡 Biến quan trọng để biết đang sửa khách hàng nào
+    private ProfileRepository repository;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +35,7 @@ public class EditProfileActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         if (getSupportActionBar() != null) getSupportActionBar().hide();
         setContentView(R.layout.activity_edit_profile);
-
+        repository = new ProfileRepository();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -74,89 +71,55 @@ public class EditProfileActivity extends AppCompatActivity {
 
     // ================= KÉO DATA LÊN GIAO DIỆN =================
     private void loadDuLieuKhachHang() {
-        ApiService api = RetrofitClient.getApiService();
-        api.getKhachHangById(currentMaTK).enqueue(new Callback<MasterDataResponse.KhachHangRes>() {
+        repository.getProfile(currentMaTK, new ProfileRepository.ProfileCallback<KhachHangResponse.KhachHangDetail>() {
             @Override
-            public void onResponse(Call<MasterDataResponse.KhachHangRes> call, Response<MasterDataResponse.KhachHangRes> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
-                    MasterDataResponse.KhachHang kh = response.body().data;
-
-                    // Ghi nhận Mã Khách Hàng để lát nữa gọi hàm Update
-                    currentMaKH = kh.maKH;
-
-                    // Đắp data lên các ô text
-                    edtSdtProfile.setText(kh.sdt);
-                    edtHoTenProfile.setText(kh.hoTen);
-                    edtEmailProfile.setText(kh.email != null ? kh.email : "");
-
-                    // Lưu luôn tên mới vào SharedPreferences lỡ lát khách ra trang chủ nó hiện Tên cập nhật luôn
-                    SharedPreferences prefs = getSharedPreferences("ThongTinKhach", Context.MODE_PRIVATE);
-                    prefs.edit().putString("TENKHACH", kh.hoTen).apply();
-
-                } else {
-                    Toast.makeText(EditProfileActivity.this, "Không kéo được dữ liệu!", Toast.LENGTH_SHORT).show();
-                }
+            public void onSuccess(KhachHangResponse.KhachHangDetail kh) {
+                edtSdtProfile.setText(kh.getSdt());
+                edtHoTenProfile.setText(kh.getHoTen());
+                edtEmailProfile.setText(kh.getEmail() != null ? kh.getEmail() : "");
             }
 
             @Override
-            public void onFailure(Call<MasterDataResponse.KhachHangRes> call, Throwable t) {
-                Toast.makeText(EditProfileActivity.this, "Lỗi mạng!", Toast.LENGTH_SHORT).show();
+            public void onError(String msg) {
+                Toast.makeText(EditProfileActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // ================= CHỐT CẬP NHẬT GỬI LÊN NODE.JS =================
     private void updateDuLieuKhachHang() {
+        //Confirm Dialog
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Xác nhận lưu thay đổi")
+                .setMessage("Bro có muốn lưu thông tin này vào hệ thống không?")
+                .setPositiveButton("Lưu ngay", (d, w) -> executeUpdate())
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void executeUpdate() {
         String tenMoi = edtHoTenProfile.getText().toString().trim();
         String emailMoi = edtEmailProfile.getText().toString().trim();
-        String passMoi = edtPassProfile.getText().toString().trim(); // Lấy pass mới
-
-        if (tenMoi.isEmpty()) {
-            Toast.makeText(this, "Họ tên không được để trống!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        String passMoi = edtPassProfile.getText().toString().trim();
 
         btnLuuProfile.setEnabled(false);
         btnLuuProfile.setText("ĐANG LƯU...");
 
-        // 💡 1. Tạo gói Thông tin khách hàng
-        com.example.quanlydatlich.model.UpdateProfileRequest.CustomerData customerData =
-                new com.example.quanlydatlich.model.UpdateProfileRequest.CustomerData(tenMoi, emailMoi);
+        UpdateProfileRequest request = new UpdateProfileRequest(
+                new UpdateProfileRequest.CustomerData(tenMoi, emailMoi),
+                passMoi.isEmpty() ? null : new UpdateProfileRequest.AccountData(passMoi)
+        );
 
-        // 💡 2. Tạo gói Tài khoản (Nếu có nhập pass thì tạo, không thì để null cho Backend bỏ qua)
-        com.example.quanlydatlich.model.UpdateProfileRequest.AccountData accountData = null;
-        if (!passMoi.isEmpty()) {
-            accountData = new com.example.quanlydatlich.model.UpdateProfileRequest.AccountData(passMoi);
-        }
-
-        // 💡 3. Gộp 2 gói thành Payload tổng
-        com.example.quanlydatlich.model.UpdateProfileRequest requestPayload =
-                new com.example.quanlydatlich.model.UpdateProfileRequest(customerData, accountData);
-
-        // API Node.js đang nhận req.params.id (Là ID lấy từ Két sắt)
-        ApiService api = RetrofitClient.getApiService();
-        api.updateKhachHangProfile(currentMaTK, requestPayload).enqueue(new retrofit2.Callback<MasterDataResponse.KhachHangRes>() {
+        repository.updateProfile(currentMaTK, request, new ProfileRepository.ProfileCallback<String>() {
             @Override
-            public void onResponse(retrofit2.Call<MasterDataResponse.KhachHangRes> call, retrofit2.Response<MasterDataResponse.KhachHangRes> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(EditProfileActivity.this, "🎉 Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-
-                    // Cập nhật lại tên ở Local
-                    SharedPreferences prefs = getSharedPreferences("ThongTinKhach", Context.MODE_PRIVATE);
-                    prefs.edit().putString("TENKHACH", tenMoi).apply();
-
-                    // Nếu đổi pass thành công, có thể yêu cầu đăng nhập lại (tùy bro) hoặc cứ đóng trang
-                    finish();
-                } else {
-                    Toast.makeText(EditProfileActivity.this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
-                    btnLuuProfile.setEnabled(true);
-                    btnLuuProfile.setText("LƯU THAY ĐỔI");
-                }
+            public void onSuccess(String msg) {
+                Toast.makeText(EditProfileActivity.this, "🎉 " + msg, Toast.LENGTH_SHORT).show();
+                getSharedPreferences("ThongTinKhach", MODE_PRIVATE).edit().putString("TENKHACH", tenMoi).apply();
+                finish();
             }
 
             @Override
-            public void onFailure(retrofit2.Call<MasterDataResponse.KhachHangRes> call, Throwable t) {
-                Toast.makeText(EditProfileActivity.this, "Lỗi đường truyền!", Toast.LENGTH_SHORT).show();
+            public void onError(String msg) {
+                Toast.makeText(EditProfileActivity.this, msg, Toast.LENGTH_SHORT).show();
                 btnLuuProfile.setEnabled(true);
                 btnLuuProfile.setText("LƯU THAY ĐỔI");
             }

@@ -1,11 +1,12 @@
 package com.example.quanlydatlich.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,11 +16,8 @@ import com.example.quanlydatlich.adapter.StaffScheduleAdapter;
 import com.example.quanlydatlich.model.BookingResponse;
 import com.example.quanlydatlich.model.ServiceResponse;
 import com.example.quanlydatlich.model.StaffBookingResponse;
-import com.example.quanlydatlich.model.UpdateStatusRequest;
-import com.example.quanlydatlich.network.ApiService;
-import com.example.quanlydatlich.network.RetrofitClient;
+import com.example.quanlydatlich.repository.StaffRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -27,114 +25,77 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class StaffScheduleActivity extends AppCompatActivity {
-
     private RecyclerView rvStaffSchedule;
-    private StaffScheduleAdapter adapter;
-
-    private List<StaffBookingResponse.StaffBooking> listLichLamViec = new ArrayList<>();
-    private List<ServiceResponse.ServiceModel> listDichVu = new ArrayList<>(); // Cuốn từ điển dịch vụ
-    private String currentMaTK = "";
+    private StaffRepository repository;
+    private String currentMaTK;
+    private ImageView btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_staff_schedule);
-        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            androidx.core.graphics.Insets systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-
 
         rvStaffSchedule = findViewById(R.id.rvStaffSchedule);
         rvStaffSchedule.setLayoutManager(new LinearLayoutManager(this));
 
-        // Mở két lấy mã Thợ
-        SharedPreferences prefs = getSharedPreferences("ThongTinKhach", Context.MODE_PRIVATE);
-        currentMaTK = prefs.getString("MATK", "");
+        repository = new StaffRepository();
+        currentMaTK = getSharedPreferences("ThongTinKhach", Context.MODE_PRIVATE)
+                .getString("MATK", "");
 
         if (!currentMaTK.isEmpty()) {
-            // Quy trình: Kéo Dịch Vụ trước (để dịch tên) -> Xong mới kéo Lịch
-            fetchDichVuData();
+            loadData();
         } else {
-            Toast.makeText(this, "Chưa đăng nhập!", Toast.LENGTH_SHORT).show();
             finish();
         }
-    }
-
-    // 1. Kéo từ điển Dịch vụ
-    private void fetchDichVuData() {
-        ApiService api = RetrofitClient.getApiService();
-        api.getServicesAll().enqueue(new Callback<ServiceResponse>() {
-            @Override
-            public void onResponse(Call<ServiceResponse> call, Response<ServiceResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    listDichVu = response.body().getData();
-                    fetchLichLamViec(currentMaTK); // Có từ điển rồi thì kéo lịch về
-                }
-            }
-            @Override
-            public void onFailure(Call<ServiceResponse> call, Throwable t) {}
+        btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Đăng xuất")
+                    .setMessage("Bro có chắc chắn muốn đăng xuất không?")
+                    .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                        SharedPreferences sharedPreferences = getSharedPreferences("ThongTinKhach", Context.MODE_PRIVATE);
+                        sharedPreferences.edit().clear().apply();
+                        Toast.makeText(this, "Đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(StaffScheduleActivity.this, HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    })
+                    .setNegativeButton("Ở lại", null)
+                    .show();
         });
+
     }
 
-    // 2. Kéo lịch của ông Thợ này
-    private void fetchLichLamViec(String maTK) {
-        ApiService api = RetrofitClient.getApiService();
-        api.getLichHenCuaNhanVien(maTK).enqueue(new Callback<StaffBookingResponse>() {
+    private void loadData() {
+        repository.fetchStaffData(currentMaTK, new StaffRepository.StaffDataCallback() {
             @Override
-            public void onResponse(Call<StaffBookingResponse> call, Response<StaffBookingResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    listLichLamViec = response.body().data;
-
-                    if (listLichLamViec.isEmpty()) {
-                        Toast.makeText(StaffScheduleActivity.this, "Hôm nay không có lịch!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    // 💡 Đủ đồ chơi rồi, lên mâm!
-                    setupAdapter();
-                }
+            public void onSuccess(List<StaffBookingResponse.StaffBooking> listLich, List<ServiceResponse.ServiceModel> listDV) {
+                setupAdapter(listLich, listDV);
             }
+
             @Override
-            public void onFailure(Call<StaffBookingResponse> call, Throwable t) {
-                Toast.makeText(StaffScheduleActivity.this, "Lỗi kết nối mạng!", Toast.LENGTH_SHORT).show();
+            public void onError(String msg) {
+                Toast.makeText(StaffScheduleActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void setupAdapter() {
-        adapter = new StaffScheduleAdapter(listLichLamViec, listDichVu, new StaffScheduleAdapter.OnActionClickListener() {
-            @Override
-            public void onUpdateStatus(String maLich, String trangThaiMoi) {
-                // Thợ bấm nút là nổ hàm này!
-                capNhatTrangThaiLich(maLich, trangThaiMoi);
-            }
+    private void setupAdapter(List<StaffBookingResponse.StaffBooking> listLich, List<ServiceResponse.ServiceModel> listDV) {
+        StaffScheduleAdapter adapter = new StaffScheduleAdapter(listLich, listDV, (maLich, trangThai) -> {
+            repository.updateStatus(maLich, trangThai, new Callback<BookingResponse>() {
+                @Override
+                public void onResponse(Call<BookingResponse> call, Response<BookingResponse> response) {
+                    Toast.makeText(StaffScheduleActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+                    loadData(); // Refresh lại danh sách
+                }
+
+                @Override
+                public void onFailure(Call<BookingResponse> call, Throwable t) {
+                    Toast.makeText(StaffScheduleActivity.this, "Lỗi mạng!", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
         rvStaffSchedule.setAdapter(adapter);
-    }
-
-    // 3. Bắn lệnh lên CSDL (Chung API update với nút Hủy của luồng Khách hàng)
-    private void capNhatTrangThaiLich(String maLich, String trangThaiMoi) {
-        UpdateStatusRequest request = new UpdateStatusRequest(trangThaiMoi);
-        ApiService api = RetrofitClient.getApiService();
-
-        api.updateBookingStatus(maLich, request).enqueue(new Callback<BookingResponse>() {
-            @Override
-            public void onResponse(Call<BookingResponse> call, Response<BookingResponse> response) {
-                if(response.isSuccessful()) {
-                    Toast.makeText(StaffScheduleActivity.this, "Đã đổi trạng thái thành " + trangThaiMoi, Toast.LENGTH_SHORT).show();
-                    // Load lại Data để thẻ nó ẩn nút đi và đổi màu
-                    fetchLichLamViec(currentMaTK);
-                } else {
-                    Toast.makeText(StaffScheduleActivity.this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<BookingResponse> call, Throwable t) {
-                Toast.makeText(StaffScheduleActivity.this, "Lỗi mạng!", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

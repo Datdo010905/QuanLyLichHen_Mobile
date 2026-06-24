@@ -68,9 +68,9 @@ public class LoginActivity extends AppCompatActivity {
                             .putInt("PHANQUYEN", phanQuyen)
                             .apply();
 
-                    // 2. PHÂN QUYỀN ĐIỀU HƯỚNG
+                    //ĐIỀU HƯỚNG
                     if (phanQuyen == 3) {
-                        // Nếu là Nhân viên -> Sang thẳng trang Lịch làm việc
+                        // Nếu là Nhân viên -> Sang trang Lịch làm việc
                         Intent intent = new Intent(LoginActivity.this, StaffScheduleActivity.class);
                         startActivity(intent);
                     } else {
