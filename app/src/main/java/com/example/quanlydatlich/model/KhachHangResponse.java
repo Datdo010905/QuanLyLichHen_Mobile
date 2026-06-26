@@ -9,7 +9,6 @@ public class KhachHangResponse {
     private KhachHangDetail data;
     public boolean isSuccess() { return success; }
     public KhachHangDetail getData() { return data; }
-
     // --- LỚP LÕI ---
     public static class KhachHangDetail {
         @SerializedName("MAKH") private String maKH;

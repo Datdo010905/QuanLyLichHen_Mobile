@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -16,6 +17,7 @@ import com.example.quanlydatlich.repository.AuthRepository;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText edtUsername, edtPassword;
+    TextView tvLogin;
     private Button btnLogin;
 
     @Override
@@ -31,6 +33,14 @@ public class LoginActivity extends AppCompatActivity {
         edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnLogin);
+
+        tvLogin = findViewById(R.id.tvDangKy);
+        tvLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
+
+
 
         btnLogin.setOnClickListener(v -> {
 

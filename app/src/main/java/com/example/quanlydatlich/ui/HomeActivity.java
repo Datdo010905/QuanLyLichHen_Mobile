@@ -44,7 +44,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         SharedPreferences prefsQ = getSharedPreferences("ThongTinKhach", Context.MODE_PRIVATE);
         int phanQuyen = prefsQ.getInt("PHANQUYEN", 0); // 0 là khách, 3 là nhân viên
 

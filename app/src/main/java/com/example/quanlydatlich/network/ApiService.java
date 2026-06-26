@@ -7,12 +7,14 @@ import com.example.quanlydatlich.model.ChiTietLichHen;
 import com.example.quanlydatlich.model.KhachHangResponse;
 import com.example.quanlydatlich.model.LichHen;
 import com.example.quanlydatlich.model.NhanVien;
+import com.example.quanlydatlich.model.RegisterRequest;
 import com.example.quanlydatlich.model.ServiceResponse;
 import com.example.quanlydatlich.model.AuthModel;
 import com.example.quanlydatlich.model.StaffBookingResponse;
 import com.example.quanlydatlich.model.UpdateProfileRequest;
 import com.example.quanlydatlich.model.UpdateStatusRequest;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -73,4 +75,7 @@ public interface ApiService {
     // Lấy lịch hẹn dành riêng cho Nhân viên (Truyền MATK vào)
     @GET("/api/lichhen/get-byIdNV-lichhen/{matk}")
     Call<StaffBookingResponse> getLichHenCuaNhanVien(@Path("matk") String matk);
+
+    @POST("api/khachhang/insert-khachhangVoiTaiKhoan")
+    Call<ResponseBody> registerUser(@Body RegisterRequest request);
 }
