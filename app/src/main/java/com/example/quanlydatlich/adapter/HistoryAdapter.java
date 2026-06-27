@@ -129,13 +129,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             case "Đã đặt":
                 holder.tvTrangThaiItem.setTextColor(Color.parseColor("#1890FF"));
                 holder.tvTrangThaiItem.setBackgroundResource(R.drawable.bg_status_booked);
-                holder.btnHuyLichItem.setVisibility(View.VISIBLE);
+                holder.btnHuyLichItem.setVisibility(View.VISIBLE);//cho huỷ khi mới đặt
                 break;
 
             case "Đang chờ":
                 holder.tvTrangThaiItem.setTextColor(Color.parseColor("#722ED1"));
                 holder.tvTrangThaiItem.setBackgroundResource(R.drawable.bg_status_pending);
-                holder.btnHuyLichItem.setVisibility(View.VISIBLE);
                 break;
 
             case "Đang thực hiện":

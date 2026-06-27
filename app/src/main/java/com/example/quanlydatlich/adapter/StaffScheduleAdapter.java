@@ -106,12 +106,12 @@ public class StaffScheduleAdapter extends RecyclerView.Adapter<StaffScheduleAdap
             case "Đã đặt":
                 holder.tvTrangThaiTho.setTextColor(Color.parseColor("#1890FF"));
                 holder.tvTrangThaiTho.setBackgroundResource(R.drawable.bg_status_booked);
-                holder.layoutActionButtons.setVisibility(View.VISIBLE);
                 break;
 
             case "Đang chờ":
                 holder.tvTrangThaiTho.setTextColor(Color.parseColor("#722ED1"));
                 holder.tvTrangThaiTho.setBackgroundResource(R.drawable.bg_status_pending);
+                holder.layoutActionButtons.setVisibility(View.VISIBLE);// cho nv huỷ khi quá giờ hẹn
                 break;
 
             case "Đang thực hiện":
@@ -137,7 +137,7 @@ public class StaffScheduleAdapter extends RecyclerView.Adapter<StaffScheduleAdap
 
         //check in KH
         holder.btnXong.setOnClickListener(v -> {
-            if (listener != null) listener.onUpdateStatus(booking.maLich, "Đang chờ");
+            if (listener != null) listener.onUpdateStatus(booking.maLich, "Đang thực hiện");
         });
 
         holder.btnKhachKhongDen.setOnClickListener(v -> {

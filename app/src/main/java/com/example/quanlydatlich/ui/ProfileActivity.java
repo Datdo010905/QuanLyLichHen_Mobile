@@ -26,7 +26,7 @@ import java.util.List;
 public class ProfileActivity extends AppCompatActivity {
     private TextView tvProfileNameValue, tvProfilePhoneValue, tvProfileEmailValue, btnEditProfile;
     private ImageView btnBackProfile;
-    private Button btnLogout;
+    private Button btnLogout, btnExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         btnBackProfile = findViewById(R.id.btnBackProfile);
         btnLogout = findViewById(R.id.btnLogout);
+        btnExit = findViewById(R.id.btnExit);
 
 
         // Mở Két sắt lấy Data
@@ -67,18 +68,38 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         btnLogout.setOnClickListener(v -> {
-            new androidx.appcompat.app.AlertDialog.Builder(this).setTitle("Đăng xuất").setMessage("Bro muốn thoát tài khoản hiện tại à?").setPositiveButton("Đăng xuất", (dialog, which) -> {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.apply();
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Đăng xuất")
+                    .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
+                    .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                        // Xóa dữ liệu đăng nhập
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear();
+                        editor.apply();
 
-                Toast.makeText(this, "Đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            }).setNegativeButton("Ở lại", null).show();
+                        // Đá về trang chủ và xóa lịch sử màn hình
+                        Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    })
+                    .setNegativeButton("Ở lại", null)
+                    .show();
+        });
+
+
+        btnExit.setOnClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Thoát ứng dụng")
+                    .setMessage("Bạn có chắc chắn muốn thoát ứng dụng không?")
+                    .setPositiveButton("Thoát", (dialog, which) -> {
+                        // Đóng toàn bộ các màn hình (Activity) đang mở và thoát app
+                        finishAffinity();
+                    })
+                    .setNegativeButton("Ở lại", null)
+                    .show();
         });
     }
 }

@@ -205,7 +205,20 @@
                 app:cornerRadius="12dp"
                 app:strokeColor="#FF3B30"
                 app:strokeWidth="1dp" />
-
+            <Button
+                android:id="@+id/btnExit"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="#FFFFFF"
+                android:text="THOÁT"
+                android:textColor="#7D7B7B"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp"
+                app:strokeColor="#777474"
+                app:strokeWidth="1dp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

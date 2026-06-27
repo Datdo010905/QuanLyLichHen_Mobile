@@ -64,13 +64,11 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="50dp"
+        <ImageView
+            android:id="@+id/imgLogo30"
+            android:layout_width="100dp"
             android:layout_height="50dp"
-            android:padding="6dp"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/anim_bell" />
+            android:src="@drawable/logo" />
     </LinearLayout>
 
     <androidx.cardview.widget.CardView

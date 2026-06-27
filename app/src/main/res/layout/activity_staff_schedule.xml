@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F8F9FA"
     android:orientation="vertical">
 
     <LinearLayout
@@ -33,11 +34,68 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvStartDate"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_edittext"
+            android:gravity="center_vertical"
+            android:hint="Từ ngày"
+            android:paddingHorizontal="12dp"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            app:drawableEndCompat="@android:drawable/ic_menu_my_calendar"
+            app:drawableTint="#153B75" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:text="-"
+            android:textColor="#666666"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvEndDate"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_edittext"
+            android:gravity="center_vertical"
+            android:hint="Đến ngày"
+            android:paddingHorizontal="12dp"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            app:drawableEndCompat="@android:drawable/ic_menu_my_calendar"
+            app:drawableTint="#153B75" />
+
+        <ImageButton
+            android:id="@+id/btnFilterDate"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_edittext"
+            android:backgroundTint="#153B75"
+            android:src="@android:drawable/ic_menu_search"
+            app:tint="#FFFFFF" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvStaffSchedule"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingVertical="8dp" />
 
 </LinearLayout>
