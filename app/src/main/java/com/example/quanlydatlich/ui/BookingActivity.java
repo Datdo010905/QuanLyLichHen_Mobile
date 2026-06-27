@@ -235,7 +235,7 @@ public class BookingActivity extends AppCompatActivity {
         // Chỉ thông báo khi khách ĐÃ chọn thợ và ĐÃ chọn ngày, nhưng danh sách giờ lại trống không
         if (!selectedThoCatId.isEmpty() && !selectedNgay.isEmpty() && !hasAvailableHours) {
             Toast.makeText(this,
-                    "⏳ Rất tiếc, thợ cắt tóc này đã kín lịch hoặc đã qua giờ nhận khách trong ngày hôm nay. Bro vui lòng chọn ngày khác nhé!", Toast.LENGTH_LONG).show();
+                    "⏳ Rất tiếc, thợ cắt tóc này đã kín lịch hoặc đã qua giờ nhận khách trong ngày hôm nay. Bạn vui lòng chọn ngày khác nhé!", Toast.LENGTH_LONG).show();
         }
     }
 

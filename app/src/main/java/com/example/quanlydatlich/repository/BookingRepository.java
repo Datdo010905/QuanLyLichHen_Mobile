@@ -51,25 +51,6 @@ public class BookingRepository {
                         callback.onError(res.getMessage());
                     }
                 } else {
-                    //lỗi 400 (Trùng mã) hoặc 500
-                    callback.onError("Lỗi máy chủ: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BookingResponse> call, Throwable t) {
-                callback.onError("Đứt cáp mạng: " + t.getMessage());
-            }
-        });
-
-        apiService.createBookingTransaction(request).enqueue(new Callback<BookingResponse>() {
-            @Override
-            public void onResponse(Call<BookingResponse> call, Response<BookingResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    BookingResponse res = response.body();
-                    if (res.isSuccess()) callback.onSuccess(res.getMessage());
-                    else callback.onError(res.getMessage());
-                } else {
                     callback.onError("Lỗi máy chủ: " + response.code());
                 }
             }
