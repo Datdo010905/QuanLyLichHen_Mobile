@@ -84,7 +84,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:backgroundTint="#F82D2D"
-                android:text="QUÁ GIỜ"
+                android:text="KHÁCH BỎ"
                 android:textColor="#FFFFFF" />
 
             <Button
@@ -94,7 +94,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:backgroundTint="#4CAF50"
-                android:text="CHECK-IN"
+                android:text="BẮT ĐẦU CẮT"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
     </LinearLayout>

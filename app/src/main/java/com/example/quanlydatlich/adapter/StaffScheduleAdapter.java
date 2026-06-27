@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quanlydatlich.R;
@@ -135,13 +136,32 @@ public class StaffScheduleAdapter extends RecyclerView.Adapter<StaffScheduleAdap
                 break;
         }
 
-        //check in KH
+        // Check-in khách
         holder.btnXong.setOnClickListener(v -> {
-            if (listener != null) listener.onUpdateStatus(booking.maLich, "Đang thực hiện");
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle("Xác nhận")
+                    .setMessage("Xác nhận khách đã đến và bắt đầu thực hiện dịch vụ?")
+                    .setPositiveButton("Xác nhận", (dialog, which) -> {
+                        if (listener != null) {
+                            listener.onUpdateStatus(booking.maLich, "Đang thực hiện");
+                        }
+                    })
+                    .setNegativeButton("Huỷ", null)
+                    .show();
         });
 
+        // Khách không đến
         holder.btnKhachKhongDen.setOnClickListener(v -> {
-            if (listener != null) listener.onUpdateStatus(booking.maLich, "Đã huỷ");
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle("Xác nhận")
+                    .setMessage("Bạn có chắc muốn đánh dấu khách không đến và huỷ lịch hẹn?")
+                    .setPositiveButton("Xác nhận", (dialog, which) -> {
+                        if (listener != null) {
+                            listener.onUpdateStatus(booking.maLich, "Đã huỷ");
+                        }
+                    })
+                    .setNegativeButton("Huỷ", null)
+                    .show();
         });
     }
     //map dịch vụ
