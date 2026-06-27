@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    android:id="@+id/main"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#153B75"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_revert"
+                app:tint="#FFFFFF" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="CAM KẾT DỊCH VỤ"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <!-- Cam kết 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7 ngày chỉnh sửa tóc miễn phí"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Nếu anh chưa hài lòng về kiểu tóc sau khi về nhà vì bất kỳ lý do gì, salon sẽ hỗ trợ chỉnh sửa hoàn toàn miễn phí trong vòng 7 ngày. Anh chỉ cần đặt lịch bình thường và báo sửa tóc với lễ tân."
+                android:textSize="16sp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"/>
+        </LinearLayout>
+
+        <!-- Cam kết 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30 ngày đổi/trả hàng miễn phí"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:justificationMode="inter_word"
+                android:text="Tất cả sản phẩm mua tại salon đều có thể đổi hoặc trả miễn phí trong vòng 30 ngày kể từ ngày mua, kể cả khi đã qua sử dụng. Cam kết hoàn lại 100% số tiền."
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <!-- Cam kết 3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7 ngày bảo hành Uốn/Nhuộm"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:justificationMode="inter_word"
+                android:text="Nếu mái tóc sau khi uốn hoặc nhuộm chưa đúng mong muốn, salon sẽ hỗ trợ chỉnh sửa miễn phí trong vòng 7 ngày. Anh chỉ cần đặt lịch và báo bảo hành với lễ tân."
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <!-- Cam kết 4 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Có chính sách giá đặc biệt nếu chờ lâu"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:justificationMode="inter_word"
+                android:text="Salon cam kết phục vụ đúng giờ đặt lịch. Nếu anh phải chờ quá 20 phút kể từ lúc check-in đến khi bắt đầu gội đầu, salon sẽ áp dụng chính sách giá đặc biệt. Không áp dụng khi xảy ra sự cố bất khả kháng như mất điện hoặc mất nước."
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <!-- Cam kết 5 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chỉ trong 2 giờ chúng em sẽ hỗ trợ anh ngay"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:justificationMode="inter_word"
+                android:text="Nếu anh chưa được báo giá hoặc tư vấn đầy đủ trước khi sử dụng dịch vụ, salon cam kết hoàn trả 100% số tiền đã thanh toán."
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:justificationMode="inter_word"
+                android:text="Nếu kiểu tóc mới chưa phù hợp hoặc cần chỉnh sửa mà chưa kịp quay lại salon, đội ngũ sẽ hỗ trợ tận nơi trong vòng 2 giờ."
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:justificationMode="inter_word"
+                android:text="Ngoài ra, nếu anh chưa hài lòng về thái độ phục vụ, không gian salon, thời gian chờ hoặc các vấn đề liên quan đến da và tóc, hãy phản hồi để salon hỗ trợ nhanh nhất."
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

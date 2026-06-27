@@ -111,6 +111,8 @@
 
 
                         <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/lottieGift"
+                            android:clickable="true"
                             android:layout_width="64dp"
                             android:layout_height="64dp"
                             android:background="@drawable/bg_circle_grey"
@@ -138,6 +140,8 @@
                         android:orientation="vertical">
 
                         <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/lottieShield"
+                            android:clickable="true"
                             android:layout_width="64dp"
                             android:layout_height="64dp"
                             android:background="@drawable/bg_circle_grey"
@@ -166,6 +170,8 @@
                         android:orientation="vertical">
 
                         <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/lottieSalon"
+                            android:clickable="true"
                             android:layout_width="64dp"
                             android:layout_height="64dp"
                             android:background="@drawable/bg_circle_grey"
@@ -198,6 +204,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/formDanhGia"
                         android:padding="16dp">
 
                         <com.google.android.material.imageview.ShapeableImageView
@@ -327,6 +334,7 @@
         app:itemTextColor="#153B75"
         app:layout_constraintBottom_toBottomOf="parent"
         app:materialThemeOverlay="@style/BottomNavTheme"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -373,6 +381,7 @@
                 app:lottie_rawRes="@raw/anim_hotline" />
 
             <TextView
+                android:id="@+id/tvHotline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

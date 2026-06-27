@@ -15,16 +15,19 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.quanlydatlich.model.KhachHangResponse;
 import com.example.quanlydatlich.repository.KhachHangRepository;
 import com.example.quanlydatlich.utils.NetworkUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.quanlydatlich.R;
 import com.example.quanlydatlich.adapter.BannerAdapter;
@@ -36,7 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
-    private TextView tvLoginNow;
+    private TextView tvLoginNow, tvHotline;
+    ConstraintLayout formDanhGia;
+    LottieAnimationView lottieShield, lottieGift, lottieSalon;
     // Khai báo biến toàn cục
     private final Handler handler = new Handler(android.os.Looper.getMainLooper());
     private Runnable runnable;
@@ -76,6 +81,41 @@ public class HomeActivity extends AppCompatActivity {
 
         RecyclerView rvServices = findViewById(R.id.rvServices);
         RecyclerView rvServices2 = findViewById(R.id.rvServices2);
+
+        lottieShield = findViewById(R.id.lottieShield);
+        lottieGift = findViewById(R.id.lottieGift);
+        lottieSalon = findViewById(R.id.lottieSalon);
+
+        lottieShield.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, CamKetActivity.class);
+            startActivity(intent);
+        });
+        lottieGift.setOnClickListener(v -> {
+            Toast.makeText(this, "Chức năng đang phát triển", Toast.LENGTH_SHORT).show();
+        });
+        lottieSalon.setOnClickListener(v -> {
+            Toast.makeText(this, "Chức năng đang phát triển", Toast.LENGTH_SHORT).show();
+        });
+
+
+
+
+        tvHotline = findViewById(R.id.tvHotline);
+        tvHotline.setOnClickListener(v -> {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Thông báo")
+                    .setMessage("Chức năng đang phát triển.")
+                    .setPositiveButton("OK", null)
+                    .show();
+        });
+
+        formDanhGia = findViewById(R.id.formDanhGia);
+        formDanhGia.setOnClickListener(v -> {
+            Toast.makeText(this, "Chức năng đang phát triển", Toast.LENGTH_SHORT).show();
+        });
+
+
+
 
         FloatingActionButton fabBooking = findViewById(R.id.fabBooking);
         fabBooking.setOnClickListener(v -> {
