@@ -27,6 +27,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private String currentMaTK = "";
     private ProfileRepository repository;
+    private String tengoc, emailgoc;
 
 
     @Override
@@ -77,6 +78,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 edtSdtProfile.setText(kh.getSdt());
                 edtHoTenProfile.setText(kh.getHoTen());
                 edtEmailProfile.setText(kh.getEmail() != null ? kh.getEmail() : "");
+
+                tengoc = kh.getHoTen();
+                emailgoc = kh.getEmail();
             }
 
             @Override
@@ -101,6 +105,19 @@ public class EditProfileActivity extends AppCompatActivity {
         String emailMoi = edtEmailProfile.getText().toString().trim();
         String passMoi = edtPassProfile.getText().toString().trim();
 
+        //check rỗng
+        if (tenMoi.isEmpty() || emailMoi.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //check chưa thay đổi
+        if (tengoc.equals(tenMoi) && emailgoc.equals(emailMoi) && passMoi.isEmpty()) {
+            Toast.makeText(this, "Không có thay đổi nào!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         btnLuuProfile.setEnabled(false);
         btnLuuProfile.setText("ĐANG LƯU...");
 
@@ -114,6 +131,9 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onSuccess(String msg) {
                 Toast.makeText(EditProfileActivity.this, "🎉 " + msg, Toast.LENGTH_SHORT).show();
                 getSharedPreferences("ThongTinKhach", MODE_PRIVATE).edit().putString("TENKHACH", tenMoi).apply();
+                tengoc = tenMoi;
+                emailgoc = emailMoi;
+
                 finish();
             }
 
